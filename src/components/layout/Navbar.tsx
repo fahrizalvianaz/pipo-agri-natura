@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
@@ -14,6 +14,8 @@ import { EASE_OUT } from "@/components/motion/Reveal";
 
 function LanguageSwitch({ solid }: { solid: boolean }) {
   const { locale, setLocale, t } = useLanguage();
+  // unique per instance: desktop and mobile switches are both mounted
+  const pillId = useId();
   const options: Locale[] = ["en", "id"];
   return (
     <div
@@ -39,7 +41,7 @@ function LanguageSwitch({ solid }: { solid: boolean }) {
           >
             {active && (
               <motion.span
-                layoutId="lang-pill"
+                layoutId={`lang-pill-${pillId}`}
                 className={clsx("absolute inset-0 rounded-full", solid ? "bg-forest" : "bg-white")}
                 transition={{ type: "spring", stiffness: 400, damping: 32 }}
               />

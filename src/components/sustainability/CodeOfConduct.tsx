@@ -23,7 +23,7 @@ export function CodeOfConduct() {
           {t.sustain.codes.map((c, i) => {
             const { icon: CodeIcon, cls } = styles[i];
             return (
-              <StaggerItem key={c.title} as="article">
+              <StaggerItem key={i} as="article">
                 <motion.div
                   className={clsx("flex h-full flex-col items-center rounded-3xl p-8 text-center text-white", cls)}
                   whileHover={{ y: -6, rotate: i === 1 ? 0 : i === 0 ? -0.6 : 0.6 }}

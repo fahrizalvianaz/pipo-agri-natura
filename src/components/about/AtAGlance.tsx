@@ -22,8 +22,8 @@ export function AtAGlance() {
           </Reveal>
 
           <Stagger as="ul" className="mt-10 divide-y divide-line border-y border-line">
-            {t.about.facts.map((f) => (
-              <StaggerItem as="li" key={f.k} className="flex items-baseline justify-between gap-6 py-4">
+            {t.about.facts.map((f, i) => (
+              <StaggerItem as="li" key={i} className="flex items-baseline justify-between gap-6 py-4">
                 <span className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">{f.k}</span>
                 <span className="text-right font-serif text-lg text-forest">{f.v}</span>
               </StaggerItem>

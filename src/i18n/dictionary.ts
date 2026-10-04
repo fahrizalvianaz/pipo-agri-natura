@@ -25,7 +25,7 @@ const en = {
       "PIPO connects Indonesia’s agricultural origins with global markets, bringing locally sourced commodities closer to international buyers through reliable trade and professional service.",
     ctaPrimary: "Explore Our Products",
     ctaSecondary: "Start a Conversation",
-    heroAlt: "Green coffee-growing hills in the highlands",
+    heroAlt: "Close-up of raw green coffee beans",
     scroll: "Scroll to discover",
     visionLabel: "Our Vision",
     vision:
@@ -240,6 +240,7 @@ const en = {
   },
   contact: {
     heroAlt: "Ripe coffee cherries on the branch",
+    heroTitle: "Let’s talk about your next shipment",
     label: "Contact Us",
     title: "Looking for green coffee from Java?",
     body: "Share your desired coffee profile, volume and destination. PIPO Agri Natura supports you with clear communication and reliable supply.",
@@ -283,7 +284,7 @@ const id: Dictionary = {
       "PIPO menghubungkan sumber komoditas agrikultur Indonesia dengan pasar global, membawa komoditas yang bersumber dari produsen lokal lebih dekat kepada pembeli internasional melalui perdagangan yang andal dan layanan profesional.",
     ctaPrimary: "Lihat Produk Kami",
     ctaSecondary: "Mulai Percakapan",
-    heroAlt: "Perbukitan hijau penghasil kopi di dataran tinggi",
+    heroAlt: "Biji kopi hijau mentah dari dekat",
     scroll: "Gulir untuk menjelajah",
     visionLabel: "Visi Kami",
     vision:
@@ -498,6 +499,7 @@ const id: Dictionary = {
   },
   contact: {
     heroAlt: "Buah kopi matang di dahan",
+    heroTitle: "Mari bicarakan pengiriman Anda berikutnya",
     label: "Kontak",
     title: "Mencari kopi hijau dari Jawa?",
     body: "Sampaikan profil kopi, volume, dan tujuan yang Anda inginkan. PIPO Agri Natura mendukung Anda dengan komunikasi yang jelas dan pasokan yang andal.",

@@ -18,7 +18,7 @@ export function HowWeWork() {
           {t.home.pillars.map((p, i) => {
             const PillarIcon = icons[i];
             return (
-              <StaggerItem key={p.title} as="article">
+              <StaggerItem key={i} as="article">
                 <motion.div
                   className="group h-full rounded-3xl border border-line bg-cream p-8 transition-shadow hover:shadow-[0_20px_50px_-20px_rgba(31,58,43,0.35)]"
                   whileHover={{ y: -6 }}

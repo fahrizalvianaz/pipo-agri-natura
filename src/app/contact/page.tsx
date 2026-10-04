@@ -9,7 +9,7 @@ export default function ContactPage() {
   const { t } = useLanguage();
   return (
     <>
-      <PageHero image={images.cherriesBranch} alt={t.contact.heroAlt} label={t.contact.label} title={t.contact.formTitle} />
+      <PageHero image={images.cherriesBranch} alt={t.contact.heroAlt} label={t.contact.label} title={t.contact.heroTitle} />
       <ContactSection />
     </>
   );

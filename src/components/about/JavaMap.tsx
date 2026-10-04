@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useReducedMotionSafe } from "@/components/motion/useReducedMotionSafe";
 import { HandPointing } from "@phosphor-icons/react";
 import { useLanguage } from "@/i18n/LanguageContext";
 
@@ -94,6 +95,8 @@ const cities: { name: string; at: [number, number]; dx: number; dy: number }[] =
 export function JavaMap() {
   const { t } = useLanguage();
   const [active, setActive] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const reduce = useReducedMotionSafe();
   const W = 1000;
   const H = MAIN.h;
 
@@ -157,8 +160,14 @@ export function JavaMap() {
             className="cursor-pointer outline-none"
             onHoverStart={() => setActive(true)}
             onHoverEnd={() => setActive(false)}
-            onFocus={() => setActive(true)}
-            onBlur={() => setActive(false)}
+            onFocus={() => {
+              setActive(true);
+              setFocused(true);
+            }}
+            onBlur={() => {
+              setActive(false);
+              setFocused(false);
+            }}
             onTap={() => setActive((v) => !v)}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
@@ -172,14 +181,14 @@ export function JavaMap() {
           >
             <motion.path
               d={main.temanggung}
-              stroke="var(--cream)"
-              strokeWidth={3}
+              stroke={focused ? "var(--forest-deep)" : "var(--cream)"}
+              strokeWidth={focused ? 5 : 3}
               initial={{ fill: "var(--forest)" }}
               animate={{ fill: active ? "var(--gold)" : "var(--forest)" }}
               filter={active ? "url(#lift)" : undefined}
             />
             {/* subtle breathing ring hints interactivity without a pin */}
-            {!active && (
+            {!active && !reduce && (
               <motion.path
                 d={main.temanggung}
                 fill="none"

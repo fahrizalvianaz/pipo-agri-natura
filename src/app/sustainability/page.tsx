@@ -11,7 +11,7 @@ export default function SustainabilityPage() {
   const { t } = useLanguage();
   return (
     <>
-      <PageHero image={images.hills} alt={t.sustain.heroAlt} label={t.sustain.label} title={t.sustain.title} intro={t.sustain.intro} />
+      <PageHero image={images.teaHills} alt={t.sustain.heroAlt} label={t.sustain.label} title={t.sustain.title} intro={t.sustain.intro} />
       <EsgPillars />
       <CodeOfConduct />
       <div className="bg-cream">

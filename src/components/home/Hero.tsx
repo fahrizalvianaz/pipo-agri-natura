@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useReducedMotionSafe } from "@/components/motion/useReducedMotionSafe";
 import { ArrowDown, ArrowRight } from "@phosphor-icons/react";
 import { ButtonLink } from "@/components/ui/Button";
 import { EASE_OUT } from "@/components/motion/Reveal";
@@ -17,13 +18,14 @@ export function Hero() {
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const textOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
+  const reduce = useReducedMotionSafe();
   const words = t.home.title.split(" ");
 
   return (
     <section ref={ref} className="relative isolate flex min-h-svh items-center overflow-hidden bg-forest-deep">
       <motion.div
         className="absolute inset-0 -z-10"
-        style={{ y: imgY }}
+        style={reduce ? undefined : { y: imgY }}
         initial={{ scale: 1.12 }}
         animate={{ scale: 1, transition: { duration: 2.2, ease: EASE_OUT } }}
       >
@@ -36,13 +38,15 @@ export function Hero() {
           className="object-cover"
         />
       </motion.div>
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-forest-deep/90 via-forest-deep/60 to-forest-deep/20" />
-      <div className="absolute inset-0 -z-10 bg-forest-deep/35 sm:hidden" />
-      <div className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-forest-deep/70 to-transparent" />
+      {/* dark only behind the text column; beans stay vivid on the right */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-forest-deep/95 from-0% via-forest-deep/70 via-40% to-transparent to-80%" />
+      <div className="absolute inset-0 -z-10 bg-forest-deep/45 sm:hidden" />
+      <div className="absolute inset-x-0 top-0 -z-10 h-32 bg-gradient-to-b from-forest-deep/60 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-t from-forest-deep/50 to-transparent" />
 
       <motion.div
         className="mx-auto w-full max-w-7xl px-4 pb-24 pt-32 sm:px-6 lg:px-8"
-        style={{ y: textY, opacity: textOpacity }}
+        style={reduce ? undefined : { y: textY, opacity: textOpacity }}
       >
         <motion.p
           className="mb-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-gold-soft"
@@ -97,7 +101,7 @@ export function Hero() {
         animate={{ opacity: 1, transition: { delay: 1.2 } }}
       >
         {t.home.scroll}
-        <motion.span animate={{ y: [0, 6, 0] }} transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}>
+        <motion.span animate={reduce ? undefined : { y: [0, 6, 0] }} transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}>
           <ArrowDown size={18} aria-hidden />
         </motion.span>
       </motion.a>

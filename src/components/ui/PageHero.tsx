@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useReducedMotionSafe } from "@/components/motion/useReducedMotionSafe";
 import { useRef } from "react";
 import { EASE_OUT } from "@/components/motion/Reveal";
 
@@ -12,10 +13,11 @@ export function PageHero({ image, alt, label, title, intro }: Props) {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
+  const reduce = useReducedMotionSafe();
 
   return (
     <section ref={ref} className="relative isolate flex min-h-[62svh] items-end overflow-hidden bg-forest-deep">
-      <motion.div className="absolute inset-0 -z-10" style={{ y }}>
+      <motion.div className="absolute inset-0 -z-10" style={reduce ? undefined : { y }}>
         <Image src={`${image}?auto=format&fit=crop&w=2000&q=75`} alt={alt} fill priority sizes="100vw" className="object-cover" />
       </motion.div>
       <div className="absolute inset-0 -z-10 bg-gradient-to-t from-forest-deep via-forest-deep/60 to-forest-deep/30" />

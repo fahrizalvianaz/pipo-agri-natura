@@ -25,7 +25,7 @@ export function EsgPillars() {
           const flip = i % 2 === 1;
           return (
             <motion.article
-              key={p.title}
+              key={i}
               className={clsx(
                 "relative grid overflow-hidden rounded-3xl bg-forest-deep lg:min-h-80",
                 flip ? "lg:grid-cols-[1fr_minmax(0,26rem)]" : "lg:grid-cols-[minmax(0,26rem)_1fr]",

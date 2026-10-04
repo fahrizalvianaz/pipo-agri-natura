@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useReducedMotionSafe } from "@/components/motion/useReducedMotionSafe";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { images } from "@/config/site";
@@ -14,6 +15,7 @@ export function ProductShowcase() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const leftY = useTransform(scrollYProgress, [0, 1], [40, -40]);
   const rightY = useTransform(scrollYProgress, [0, 1], [80, -60]);
+  const reduce = useReducedMotionSafe();
 
   return (
     <section id="product" className="scroll-mt-20 bg-cream">
@@ -27,7 +29,7 @@ export function ProductShowcase() {
           <SectionHeading label={t.product.label} title={t.product.title} intro={t.product.intro} tone="light" />
 
           <div className="mt-14 grid grid-cols-5 items-end gap-4 sm:gap-6">
-            <motion.div style={{ y: leftY }} className="relative col-span-3 aspect-[4/3] overflow-hidden rounded-3xl shadow-2xl">
+            <motion.div style={reduce ? undefined : { y: leftY }} className="relative col-span-3 aspect-[4/3] overflow-hidden rounded-3xl shadow-2xl">
               <Image
                 src={`${images.sack}?auto=format&fit=crop&w=1400&q=75`}
                 alt={t.product.bannerAlt}
@@ -36,7 +38,7 @@ export function ProductShowcase() {
                 className="object-cover"
               />
             </motion.div>
-            <motion.div style={{ y: rightY }} className="relative col-span-2 aspect-[3/4] overflow-hidden rounded-3xl shadow-2xl">
+            <motion.div style={reduce ? undefined : { y: rightY }} className="relative col-span-2 aspect-[3/4] overflow-hidden rounded-3xl shadow-2xl">
               <Image
                 src={`${images.greenBeans}?auto=format&fit=crop&w=900&q=75`}
                 alt={t.home.products[0].name}
