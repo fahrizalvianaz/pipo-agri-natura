@@ -8,7 +8,7 @@ function SkipLink() {
   return (
     <a
       href="#main"
-      className="sr-only z-50 rounded-full bg-forest px-5 py-3 text-sm font-semibold text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+      className="sr-only z-50 rounded-md bg-ink px-5 py-3 text-sm font-semibold text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
     >
       {t.nav.skip}
     </a>

@@ -6,7 +6,6 @@ import { HowWeWork } from "@/components/home/HowWeWork";
 import { ProductsPreview } from "@/components/home/ProductsPreview";
 import { CtaBand } from "@/components/ui/CtaBand";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { images } from "@/config/site";
 
 export default function HomePage() {
   const { t } = useLanguage();
@@ -17,11 +16,10 @@ export default function HomePage() {
       <HowWeWork />
       <ProductsPreview />
       <CtaBand
-        title={t.home.closingTitle}
-        body={t.home.closingBody}
-        cta={t.home.closingCta}
-        href="/contact"
-        image={images.greenBeans}
+        title={t.home.sampleTitle}
+        body={t.home.sampleBody}
+        cta={t.home.sampleCta}
+        href="/about#request-sample"
       />
     </>
   );

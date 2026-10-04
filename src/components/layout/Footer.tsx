@@ -17,14 +17,14 @@ export function Footer() {
   ];
 
   return (
-    <footer className="bg-forest-deep text-white/80">
+    <footer className="bg-night text-white/80">
       <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
         <div className="max-w-sm">
           <Logo tone="light" />
           <p className="mt-5 text-sm leading-relaxed">{t.footer.tagline}</p>
         </div>
         <div>
-          <h2 className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-gold-soft">{t.footer.explore}</h2>
+          <h2 className="mb-3 text-sm font-medium text-accent-soft">{t.footer.explore}</h2>
           <ul className="space-y-1">
             {links.map((l) => (
               <li key={l.href}>
@@ -36,7 +36,7 @@ export function Footer() {
           </ul>
         </div>
         <div>
-          <h2 className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-gold-soft">{t.footer.reach}</h2>
+          <h2 className="mb-3 text-sm font-medium text-accent-soft">{t.footer.reach}</h2>
           <ul className="space-y-3 text-sm">
             <li>
               <a href={`mailto:${site.email}`} className="flex cursor-pointer items-center gap-3 hover:text-white">
@@ -60,9 +60,12 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-white/10">
-        <p className="mx-auto max-w-7xl px-4 py-6 text-xs text-white/60 sm:px-6 lg:px-8">
-          © {site.established} {site.name}. {t.footer.rights}
-        </p>
+        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-6 text-xs text-white/60 sm:flex-row sm:justify-between sm:px-6 lg:px-8">
+          <p>
+            © {site.established} {site.name}. {t.footer.rights}
+          </p>
+          <p>{t.footer.imageNote}</p>
+        </div>
       </div>
     </footer>
   );

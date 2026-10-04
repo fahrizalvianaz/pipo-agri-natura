@@ -1,50 +1,47 @@
-"use client";
-
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useReducedMotionSafe } from "@/components/motion/useReducedMotionSafe";
-import { useRef } from "react";
-import { EASE_OUT } from "@/components/motion/Reveal";
+import clsx from "clsx";
 
-type Props = { image: string; alt: string; label: string; title: string; intro?: string };
+type Props = {
+  label: string;
+  title: string;
+  intro?: string;
+  /** Optional photo. Without one the header is a plain paper band — used where no accurate image exists. */
+  image?: { src: string; alt: string };
+  children?: React.ReactNode;
+};
 
-/** Dark image header for inner pages, with a subtle parallax on the photo. */
-export function PageHero({ image, alt, label, title, intro }: Props) {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
-  const reduce = useReducedMotionSafe();
-
+/** Static page header for inner pages. */
+export function PageHero({ label, title, intro, image, children }: Props) {
+  const dark = !!image;
   return (
-    <section ref={ref} className="relative isolate flex min-h-[62svh] items-end overflow-hidden bg-forest-deep">
-      <motion.div className="absolute inset-0 -z-10" style={reduce ? undefined : { y }}>
-        <Image src={`${image}?auto=format&fit=crop&w=2000&q=75`} alt={alt} fill priority sizes="100vw" className="object-cover" />
-      </motion.div>
-      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-forest-deep via-forest-deep/60 to-forest-deep/30" />
-      <div className="mx-auto w-full max-w-7xl px-4 pb-16 pt-36 sm:px-6 sm:pb-20 lg:px-8">
-        <motion.p
-          className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-gold-soft"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_OUT } }}
-        >
-          {label}
-        </motion.p>
-        <motion.h1
-          className="max-w-3xl font-serif text-4xl leading-tight text-white sm:text-5xl lg:text-6xl"
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0, transition: { duration: 0.8, delay: 0.08, ease: EASE_OUT } }}
-        >
+    <section
+      className={clsx(
+        "relative isolate overflow-hidden",
+        dark ? "flex min-h-[52svh] items-end bg-night" : "border-b border-line bg-paper",
+      )}
+    >
+      {image && (
+        <>
+          <Image
+            src={`${image.src}?auto=format&fit=crop&w=2000&q=75`}
+            alt={image.alt}
+            fill
+            priority
+            sizes="100vw"
+            className="-z-10 object-cover"
+          />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-t from-night/90 via-night/55 to-night/25" />
+        </>
+      )}
+      <div className={clsx("mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8", dark ? "pb-14 pt-36" : "pb-12 pt-32 sm:pb-16 sm:pt-36")}>
+        <p className={clsx("mb-3 text-sm font-medium", dark ? "text-accent-soft" : "text-accent")}>{label}</p>
+        <h1 className={clsx("max-w-3xl font-serif text-4xl leading-tight sm:text-5xl", dark ? "text-white" : "text-ink")}>
           {title}
-        </motion.h1>
+        </h1>
         {intro && (
-          <motion.p
-            className="mt-6 max-w-2xl text-base text-white/85 sm:text-lg"
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0, transition: { duration: 0.8, delay: 0.16, ease: EASE_OUT } }}
-          >
-            {intro}
-          </motion.p>
+          <p className={clsx("mt-5 max-w-2xl text-base sm:text-lg", dark ? "text-white/85" : "text-muted")}>{intro}</p>
         )}
+        {children}
       </div>
     </section>
   );

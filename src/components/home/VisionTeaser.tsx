@@ -1,36 +1,27 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowRight, Quotes } from "@phosphor-icons/react";
-import { Reveal } from "@/components/motion/Reveal";
+import { ArrowRight } from "@phosphor-icons/react";
+import { SmartLink } from "@/components/ui/SmartLink";
 import { useLanguage } from "@/i18n/LanguageContext";
 
-/** Shows only part of the vision statement (per brief) and invites the reader to About. */
+/** The company vision, set slightly apart from body text — no quote icon, no motion. */
 export function VisionTeaser() {
   const { t } = useLanguage();
-
   return (
-    <section id="vision" className="overflow-hidden bg-cream py-20 sm:py-24">
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[auto_1fr] lg:gap-16 lg:px-8">
-        <div className="flex items-start gap-4 lg:flex-col">
-          <Quotes size={44} weight="fill" className="text-gold" aria-hidden />
-          <p className="pt-3 text-xs font-semibold uppercase tracking-[0.22em] text-gold lg:pt-0">{t.home.visionLabel}</p>
-        </div>
+    <section id="vision" className="bg-paper py-16 sm:py-20">
+      <div className="mx-auto grid max-w-7xl gap-4 px-4 sm:px-6 md:grid-cols-[12rem_1fr] md:gap-12 lg:px-8">
+        <p className="text-sm font-medium text-accent md:pt-1.5">{t.home.visionLabel}</p>
         <div>
-          <Reveal>
-            <blockquote>
-            <p className="max-w-4xl font-serif text-3xl leading-[1.3] text-forest sm:text-4xl lg:text-[2.75rem]">
-              “{t.home.vision}”
-            </p>
-            </blockquote>
-          </Reveal>
-          <Link
+          <blockquote className="max-w-3xl border-l-2 border-sage pl-5 font-serif text-xl leading-relaxed text-ink sm:text-2xl">
+            {t.home.vision}
+          </blockquote>
+          <SmartLink
             href="/about"
-            className="group mt-10 inline-flex min-h-11 cursor-pointer items-center gap-2 font-semibold text-forest hover:text-gold"
+            className="group mt-6 inline-flex min-h-11 cursor-pointer items-center gap-2 text-sm font-semibold text-accent hover:text-ink"
           >
             {t.home.visionCta}
-            <ArrowRight size={18} weight="bold" className="transition-transform group-hover:translate-x-1" aria-hidden />
-          </Link>
+            <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" aria-hidden />
+          </SmartLink>
         </div>
       </div>
     </section>

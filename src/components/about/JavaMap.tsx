@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { useReducedMotionSafe } from "@/components/motion/useReducedMotionSafe";
-import { HandPointing } from "@phosphor-icons/react";
+import { motion } from "framer-motion";
+import { CaretRight } from "@phosphor-icons/react";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 /*
- * Stylised map of Central Java with a Java inset. Coastline points are approximate
- * [lon, lat] pairs projected linearly and smoothed — good for orientation, not survey-accurate.
+ * Editorial origin map: Central Java in detail, with an Indonesia inset for context.
+ * Coastlines are approximate [lon, lat] points, projected linearly and smoothed —
+ * good for orientation, not survey-accurate. Swap in GeoJSON-derived paths if needed.
  */
 type LonLat = [number, number];
 type Box = { lon0: number; lon1: number; lat0: number; lat1: number; w: number };
@@ -51,11 +51,6 @@ const JAVA: LonLat[] = [
   [106.2, -6.98], [105.8, -6.85], [105.5, -6.88],
 ];
 
-const MADURA: LonLat[] = [
-  [112.72, -6.95], [113.2, -6.88], [113.7, -6.87], [114.1, -6.9], [114.12, -7.12], [113.6, -7.2],
-  [113.1, -7.22], [112.75, -7.15],
-];
-
 const CENTRAL_JAVA: LonLat[] = [
   [108.85, -6.8], [109.1, -6.85], [109.7, -6.88], [110.1, -6.9], [110.4, -6.95], [110.6, -6.75],
   [110.65, -6.5], [110.9, -6.4], [111.1, -6.6], [111.35, -6.7], [111.7, -6.75], [111.55, -7.1],
@@ -69,10 +64,28 @@ const TEMANGGUNG: LonLat[] = [
   [110.36, -7.38], [110.27, -7.45], [110.15, -7.43], [110.05, -7.47], [109.97, -7.39], [109.93, -7.28],
 ];
 
+// Simplified outlines of Indonesia's main islands, for the inset only.
+const INDONESIA: LonLat[][] = [
+  // Sumatra
+  [[95.3, 5.6], [97.5, 5.2], [100.3, 2.5], [103.8, 0.0], [104.5, -1.5], [106.0, -3.0], [105.8, -5.8], [104.5, -5.9], [102.3, -4.0], [100.4, -1.0], [98.7, 1.7], [96.0, 3.8]],
+  // Borneo
+  [[109.0, 1.5], [111.5, 2.5], [113.0, 3.2], [115.4, 5.0], [116.8, 7.0], [119.2, 5.1], [118.0, 4.2], [117.9, 1.1], [118.9, 0.9], [117.5, -0.8], [116.5, -2.5], [116.0, -3.9], [114.6, -4.1], [113.0, -3.2], [110.2, -2.9], [109.6, -1.0]],
+  // Sulawesi
+  [[118.8, -2.6], [119.5, -0.5], [120.2, 0.4], [121.5, 1.0], [123.0, 0.9], [125.2, 1.6], [124.5, 0.4], [121.5, 0.5], [120.5, -0.9], [123.3, -0.9], [123.4, -1.7], [121.8, -1.9], [122.9, -4.4], [122.3, -5.4], [121.0, -2.9], [120.4, -2.9], [120.4, -5.5], [119.4, -5.5], [119.4, -4.0]],
+  // New Guinea (western half)
+  [[131.0, -1.2], [132.5, -0.4], [134.1, -0.9], [135.0, -3.3], [137.5, -1.5], [141.0, -2.6], [141.0, -9.1], [139.0, -8.1], [137.6, -7.0], [136.0, -4.9], [133.6, -3.9], [131.8, -2.9]],
+  // Bali – Nusa Tenggara
+  [[114.4, -8.1], [116.0, -8.3], [119.0, -8.3], [122.0, -8.2], [123.0, -8.4], [122.0, -8.9], [119.0, -8.8], [116.0, -8.9], [114.5, -8.6]],
+  // Timor
+  [[123.5, -10.2], [125.0, -9.0], [127.0, -8.4], [125.0, -9.6], [124.0, -10.3]],
+];
+
+const W = 1000;
 // Main view: zoomed on Central Java
-const MAIN = projector({ lon0: 108.2, lon1: 112.0, lat0: -6.15, lat1: -8.35, w: 1000 });
-// Inset: whole of Java
-const INSET = projector({ lon0: 105.1, lon1: 114.7, lat0: -5.85, lat1: -8.8, w: 240 });
+const MAIN = projector({ lon0: 108.2, lon1: 112.0, lat0: -6.15, lat1: -8.35, w: W });
+// Inset: Indonesia
+const INSET_W = 300;
+const INSET = projector({ lon0: 94.5, lon1: 141.5, lat0: 7.5, lat1: -11, w: INSET_W });
 
 const main = {
   java: smoothPath(JAVA, MAIN.p),
@@ -80,78 +93,54 @@ const main = {
   temanggung: smoothPath(TEMANGGUNG, MAIN.p, 0.4),
 };
 const inset = {
+  islands: INDONESIA.map((isl) => smoothPath(isl, INSET.p)),
   java: smoothPath(JAVA, INSET.p),
-  madura: smoothPath(MADURA, INSET.p),
-  central: smoothPath(CENTRAL_JAVA, INSET.p),
   frame: [INSET.p([108.2, -6.15]), INSET.p([112.0, -8.35])] as const,
 };
 
 const [tx, ty] = MAIN.p([110.15, -7.29]);
-const cities: { name: string; at: [number, number]; dx: number; dy: number }[] = [
-  { name: "Semarang", at: MAIN.p([110.42, -6.99]), dx: 12, dy: 5 },
-  { name: "Yogyakarta", at: MAIN.p([110.37, -7.8]), dx: 12, dy: 5 },
-];
+const [cjx, cjy] = MAIN.p([109.25, -7.5]);
+// Temanggung label sits up-right of the region, joined by a short leader line
+const label = { x: tx + 120, y: ty - 120 };
 
 export function JavaMap() {
   const { t } = useLanguage();
   const [active, setActive] = useState(false);
   const [focused, setFocused] = useState(false);
-  const reduce = useReducedMotionSafe();
-  const W = 1000;
   const H = MAIN.h;
+  const insetH = INSET.h;
 
   return (
-    <figure className="relative">
-      <div className="relative overflow-hidden rounded-3xl border border-line bg-sea">
+    <figure>
+      <div className="overflow-hidden rounded-md border border-line bg-sea">
         <svg viewBox={`0 0 ${W} ${H}`} className="block w-full" role="img" aria-labelledby="java-map-title">
           <title id="java-map-title">{t.about.mapTitle}</title>
           <defs>
-            <pattern id="sea-dots" width="18" height="18" patternUnits="userSpaceOnUse">
-              <circle cx="2" cy="2" r="1.1" fill="var(--forest)" opacity="0.12" />
-            </pattern>
             <filter id="lift" x="-60%" y="-60%" width="220%" height="220%">
-              <feDropShadow dx="0" dy="14" stdDeviation="10" floodColor="#142a1e" floodOpacity="0.35" />
+              <feDropShadow dx="0" dy="12" stdDeviation="9" floodColor="#1c1e1a" floodOpacity="0.3" />
             </filter>
           </defs>
 
-          <rect width={W} height={H} fill="url(#sea-dots)" />
-          <text x={W * 0.5} y={52} textAnchor="middle" className="fill-forest/40 font-serif text-[22px] italic" aria-hidden>
+          <text x={W * 0.5} y={58} textAnchor="middle" className="fill-muted font-serif text-[26px] italic" aria-hidden>
             Java Sea
           </text>
-          <text x={W * 0.5} y={H - 26} textAnchor="middle" className="fill-forest/40 font-serif text-[22px] italic" aria-hidden>
+          <text x={W * 0.42} y={H - 30} textAnchor="middle" className="fill-muted font-serif text-[26px] italic" aria-hidden>
             Indian Ocean
           </text>
 
-          <path d={main.java} fill="var(--cream)" stroke="var(--forest)" strokeOpacity={0.25} strokeWidth={1.5} />
-          <motion.path
-            d={main.central}
-            fill="var(--leaf)"
-            stroke="var(--cream)"
-            strokeWidth={2.5}
-            initial={{ fillOpacity: 0.32 }}
-            animate={{ fillOpacity: active ? 0.48 : 0.32 }}
-            transition={{ duration: 0.4 }}
-          />
+          <path d={main.java} fill="var(--paper)" stroke="var(--ink)" strokeOpacity={0.2} strokeWidth={1.5} />
+          <path d={main.central} fill="var(--sage)" fillOpacity={0.28} stroke="var(--paper)" strokeWidth={2.5} />
           <text
-            x={MAIN.p([109.3, -7.45])[0]}
-            y={MAIN.p([109.3, -7.45])[1]}
+            x={cjx}
+            y={cjy}
             textAnchor="middle"
-            className="fill-forest text-[17px] font-semibold uppercase tracking-[0.24em]"
+            className="fill-accent text-[24px] font-semibold uppercase tracking-[0.18em]"
             aria-hidden
           >
             {t.about.mapCentral}
           </text>
 
-          {cities.map((c) => (
-            <g key={c.name} aria-hidden>
-              <circle cx={c.at[0]} cy={c.at[1]} r={4} fill="var(--forest)" opacity={0.55} />
-              <text x={c.at[0] + c.dx} y={c.at[1] + c.dy} className="fill-forest/70 text-[15px]">
-                {c.name}
-              </text>
-            </g>
-          ))}
-
-          {/* Temanggung: no marker — the region itself lifts on hover / focus / tap */}
+          {/* Temanggung: the region itself lifts on hover / focus / tap — no pin marker */}
           <motion.g
             tabIndex={0}
             role="button"
@@ -175,78 +164,63 @@ export function JavaMap() {
                 setActive((v) => !v);
               }
             }}
-            animate={{ y: active ? -22 : 0, scale: active ? 1.12 : 1 }}
+            animate={{ y: active ? -16 : 0, scale: active ? 1.1 : 1 }}
             style={{ transformOrigin: `${tx}px ${ty}px`, transformBox: "view-box" }}
-            transition={{ type: "spring", stiffness: 300, damping: 18 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
           >
             <motion.path
               d={main.temanggung}
-              stroke={focused ? "var(--forest-deep)" : "var(--cream)"}
+              stroke={focused ? "var(--ink)" : "var(--paper)"}
               strokeWidth={focused ? 5 : 3}
-              initial={{ fill: "var(--forest)" }}
-              animate={{ fill: active ? "var(--gold)" : "var(--forest)" }}
+              initial={{ fill: "var(--accent)" }}
+              animate={{ fill: active ? "var(--ink)" : "var(--accent)" }}
               filter={active ? "url(#lift)" : undefined}
             />
-            {/* subtle breathing ring hints interactivity without a pin */}
-            {!active && !reduce && (
-              <motion.path
-                d={main.temanggung}
-                fill="none"
-                stroke="var(--gold)"
-                strokeWidth={2}
-                initial={{ opacity: 0.8, scale: 1 }}
-                animate={{ opacity: 0, scale: 1.5 }}
-                style={{ transformOrigin: `${tx}px ${ty}px`, transformBox: "view-box" }}
-                transition={{ duration: 2.2, repeat: Infinity, ease: "easeOut" }}
-              />
-            )}
           </motion.g>
 
-          <AnimatePresence>
-            {active && (
-              <motion.g
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 6, transition: { duration: 0.15 } }}
-                pointerEvents="none"
-              >
-                <rect x={tx - 120} y={ty - 170} width={240} height={74} rx={16} fill="var(--forest-deep)" />
-                <path d={`M${tx - 10} ${ty - 97} L${tx} ${ty - 85} L${tx + 10} ${ty - 97} Z`} fill="var(--forest-deep)" />
-                <text x={tx} y={ty - 137} textAnchor="middle" className="fill-white font-serif text-[26px]">
-                  {t.about.mapLabel}
-                </text>
-                <text x={tx} y={ty - 112} textAnchor="middle" className="fill-[var(--gold-soft)] text-[14px] font-semibold uppercase tracking-[0.2em]">
-                  {t.about.mapSub}
-                </text>
-              </motion.g>
-            )}
-          </AnimatePresence>
+          {/* always-visible label, so the map reads without any interaction */}
+          <g aria-hidden pointerEvents="none">
+            <line x1={tx + 30} y1={ty - 26} x2={label.x - 8} y2={label.y + 8} stroke="var(--ink)" strokeWidth={1.5} />
+            <text x={label.x} y={label.y} className="fill-ink font-serif text-[40px]">
+              {t.about.mapLabel}
+            </text>
+            <text x={label.x + 2} y={label.y + 30} className="fill-muted text-[20px] font-medium uppercase tracking-[0.16em]">
+              {t.about.mapSub}
+            </text>
+          </g>
 
-          {/* Java inset */}
-          <g transform={`translate(${W - 268} ${H - 128})`} aria-hidden>
-            <rect x={-14} y={-16} width={268} height={INSET.h + 34} rx={12} fill="var(--cream)" opacity={0.92} stroke="var(--line)" />
-            <path d={inset.java} fill="var(--forest)" opacity={0.25} />
-            <path d={inset.madura} fill="var(--forest)" opacity={0.25} />
-            <path d={inset.central} fill="var(--leaf)" opacity={0.85} />
+          {/* Indonesia inset with the zoomed area marked */}
+          <g transform={`translate(${W - INSET_W - 36} ${H - insetH - 52})`} aria-hidden>
+            <rect x={-16} y={-36} width={INSET_W + 32} height={insetH + 56} rx={6} fill="var(--paper)" stroke="var(--line)" />
+            <text x={0} y={-12} className="fill-muted text-[18px] font-medium uppercase tracking-[0.16em]">
+              {t.about.mapIndonesia}
+            </text>
+            {inset.islands.map((d, i) => (
+              <path key={i} d={d} fill="var(--ink)" opacity={0.18} />
+            ))}
+            <path d={inset.java} fill="var(--sage)" />
             <rect
-              x={inset.frame[0][0]}
-              y={inset.frame[0][1]}
-              width={inset.frame[1][0] - inset.frame[0][0]}
-              height={inset.frame[1][1] - inset.frame[0][1]}
+              x={inset.frame[0][0] - 2}
+              y={inset.frame[0][1] - 2}
+              width={inset.frame[1][0] - inset.frame[0][0] + 4}
+              height={inset.frame[1][1] - inset.frame[0][1] + 4}
               fill="none"
-              stroke="var(--gold)"
+              stroke="var(--ink)"
               strokeWidth={1.5}
-              strokeDasharray="4 3"
             />
           </g>
         </svg>
-
-        <p className="flex items-center gap-2 border-t border-line bg-cream/80 px-5 py-3 text-xs font-medium text-muted">
-          <HandPointing size={16} aria-hidden /> {t.about.mapHint}
-        </p>
       </div>
 
-      <figcaption className="mt-6 space-y-3 border-l-2 border-gold pl-5 text-sm text-muted">
+      <figcaption className="mt-4 space-y-3 text-sm text-muted">
+        <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1 font-medium text-ink" aria-label={t.about.mapTitle}>
+          {t.about.mapPath.map((step, i) => (
+            <li key={i} className="flex items-center gap-1.5">
+              {i > 0 && <CaretRight size={12} className="text-muted" aria-hidden />}
+              <span className={i === t.about.mapPath.length - 1 ? "text-accent" : undefined}>{step}</span>
+            </li>
+          ))}
+        </ol>
         <p>{t.about.mapNoteEn}</p>
         <p lang="id" className="italic">
           {t.about.mapNoteId}

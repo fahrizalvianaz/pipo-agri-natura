@@ -8,14 +8,18 @@ npm run build && npm run start
 ```
 
 ## Pages
-- `/` Home: hero, vision teaser, How We Work, products, CTA
-- `/about` About + interactive Java map (Temanggung lifts on hover), `#product` showcase, specs, FOB/CIF table, sample CTA, sourcing form
-- `/sustainability` ESG pillars + Code of Conduct
-- `/contact` Email / WhatsApp buttons + partnership form
+- `/` Home: hero with fact strip, vision, how we work, products, sample request
+- `/about` About + origin map (Indonesia → Java → Central Java → Temanggung), `#product` overview and FOB/CIF terms, `#request-sample` sourcing form
+- `/sustainability` Short, factual statement (no unverified programmes or certifications)
+- `/contact` Direct email / WhatsApp buttons + inquiry form
 
-## Before going live, edit
-- `src/config/site.ts`: email, WhatsApp number, address, export port (currently **placeholders**), image URLs
-- `src/i18n/dictionary.ts`: all copy (EN + ID); product spec values marked "To be confirmed"
-- Images are Unsplash placeholders. Put real photos in `public/images/` and update `images` in `site.ts`.
+## Content rule
+Only publish what PIPO has confirmed. Product specs, export port, certifications and sustainability
+programmes are deliberately left out until confirmed. Add them in `src/i18n/dictionary.ts` (EN + ID).
+
+## Before going live, confirm or supply
+- `src/config/site.ts`: company email (placeholder), export port (omitted), approved logo (`src/components/layout/Logo.tsx` is a text placeholder)
+- Product specifications (grade, processing, moisture, screen size, packaging) → `product.specRows` in the dictionary
+- Real photography → `public/images/`, then update `images` in `site.ts`. Current photos are illustrative Unsplash images, labelled as such in the footer and captions.
 
 Forms don't need a backend. They open the visitor's email app (`mailto:`) or WhatsApp (`wa.me`) with the message already filled in.

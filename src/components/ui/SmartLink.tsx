@@ -4,6 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useReducedMotionSafe } from "@/components/motion/useReducedMotionSafe";
 
+/** Fired after an in-page jump (replaceState does not emit `hashchange`). */
+export const HASH_EVENT = "pipo:hash";
+
 /** Scrolls to an in-page section (or the top) and moves focus there for keyboard / screen-reader users. */
 export function scrollToSection(hash: string, reduce: boolean) {
   const behavior: ScrollBehavior = reduce ? "auto" : "smooth";
@@ -46,6 +49,7 @@ export function SmartLink({ href, onNavigate, onClick, ...rest }: Props) {
         if (!samePage || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
         e.preventDefault();
         window.history.replaceState(window.history.state, "", hash ? `${pathname}#${hash}` : pathname);
+        window.dispatchEvent(new Event(HASH_EVENT));
         // let a closing mobile menu release the scroll lock first
         requestAnimationFrame(() => scrollToSection(hash, reduce));
       }}

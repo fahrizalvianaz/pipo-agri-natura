@@ -1,110 +1,59 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useReducedMotionSafe } from "@/components/motion/useReducedMotionSafe";
-import { ArrowDown, ArrowRight } from "@phosphor-icons/react";
+import { motion } from "framer-motion";
 import { ButtonLink } from "@/components/ui/Button";
-import { EASE_OUT } from "@/components/motion/Reveal";
+import { EASE_OUT } from "@/components/motion/tokens";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { images } from "@/config/site";
 
 export function Hero() {
   const { t } = useLanguage();
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
-  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const textOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
-
-  const reduce = useReducedMotionSafe();
-  const words = t.home.title.split(" ");
 
   return (
-    <section ref={ref} className="relative isolate flex min-h-svh items-center overflow-hidden bg-forest-deep">
+    <section className="relative isolate flex min-h-svh flex-col overflow-hidden bg-night">
+      <Image
+        src={`${images.greenBeansPile}?auto=format&fit=crop&w=2400&q=75`}
+        alt={t.home.heroAlt}
+        fill
+        priority
+        sizes="100vw"
+        className="-z-10 object-cover"
+      />
+      {/* dark only behind the text column; beans stay visible on the right */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-night/95 from-0% via-night/75 via-45% to-night/10 to-85%" />
+      <div className="absolute inset-0 -z-10 bg-night/40 sm:hidden" />
+      <div className="absolute inset-x-0 top-0 -z-10 h-32 bg-gradient-to-b from-night/60 to-transparent" />
+
+      {/* one gentle fade on load — the only entrance animation on the site */}
       <motion.div
-        className="absolute inset-0 -z-10"
-        style={reduce ? undefined : { y: imgY }}
-        initial={{ scale: 1.12 }}
-        animate={{ scale: 1, transition: { duration: 2.2, ease: EASE_OUT } }}
+        className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-4 pb-10 pt-32 sm:px-6 lg:px-8"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, transition: { duration: 0.6, ease: EASE_OUT } }}
       >
-        <Image
-          src={`${images.hero}?auto=format&fit=crop&w=2400&q=75`}
-          alt={t.home.heroAlt}
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
-      </motion.div>
-      {/* dark only behind the text column; beans stay vivid on the right */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-forest-deep/95 from-0% via-forest-deep/70 via-40% to-transparent to-80%" />
-      <div className="absolute inset-0 -z-10 bg-forest-deep/45 sm:hidden" />
-      <div className="absolute inset-x-0 top-0 -z-10 h-32 bg-gradient-to-b from-forest-deep/60 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-t from-forest-deep/50 to-transparent" />
-
-      <motion.div
-        className="mx-auto w-full max-w-7xl px-4 pb-24 pt-32 sm:px-6 lg:px-8"
-        style={reduce ? undefined : { y: textY, opacity: textOpacity }}
-      >
-        <motion.p
-          className="mb-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.3em] text-gold-soft"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_OUT } }}
-        >
-          <span className="h-px w-10 bg-gold-soft" aria-hidden />
-          {t.home.eyebrow}
-        </motion.p>
-
-        <h1 key={t.home.title} className="max-w-4xl font-serif text-[2.6rem] leading-[1.08] text-white sm:text-6xl lg:text-7xl">
-          {words.map((w, i) => (
-            <span key={i} className="inline-block overflow-hidden pb-1 align-bottom">
-              <motion.span
-                className="inline-block"
-                initial={{ y: "105%" }}
-                animate={{ y: 0, transition: { duration: 0.8, delay: 0.15 + i * 0.05, ease: EASE_OUT } }}
-              >
-                {w}&nbsp;
-              </motion.span>
-            </span>
-          ))}
-        </h1>
-
-        <motion.p
-          key={t.home.subtitle}
-          className="mt-8 max-w-2xl text-base text-white/85 sm:text-lg"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0, transition: { duration: 0.8, delay: 0.6, ease: EASE_OUT } }}
-        >
-          {t.home.subtitle}
-        </motion.p>
-
-        <motion.div
-          className="mt-10 flex flex-col gap-3 sm:flex-row"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0, transition: { duration: 0.8, delay: 0.75, ease: EASE_OUT } }}
-        >
-          <ButtonLink href="/about#product" variant="gold">
-            {t.home.ctaPrimary} <ArrowRight size={18} weight="bold" aria-hidden />
+        <h1 className="max-w-3xl font-serif text-[2.4rem] leading-[1.1] text-white sm:text-5xl lg:text-6xl">{t.home.title}</h1>
+        <p className="mt-6 max-w-2xl text-base text-white/85 sm:text-lg">{t.home.subtitle}</p>
+        <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+          <ButtonLink href="/about#request-sample" variant="accent">
+            {t.home.ctaPrimary}
           </ButtonLink>
-          <ButtonLink href="/contact" variant="outline-light">
+          <ButtonLink href="/about#product" variant="outline-light">
             {t.home.ctaSecondary}
           </ButtonLink>
-        </motion.div>
+        </div>
       </motion.div>
 
-      <motion.a
-        href="#vision"
-        className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 cursor-pointer flex-col items-center gap-2 text-xs uppercase tracking-[0.2em] text-white/70 hover:text-white sm:flex"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1, transition: { delay: 1.2 } }}
-      >
-        {t.home.scroll}
-        <motion.span animate={reduce ? undefined : { y: [0, 6, 0] }} transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}>
-          <ArrowDown size={18} aria-hidden />
-        </motion.span>
-      </motion.a>
+      {/* factual strip: what a buyer needs at a glance */}
+      <div className="border-t border-white/15 bg-night/60 backdrop-blur-sm">
+        <dl className="mx-auto grid max-w-7xl gap-x-8 gap-y-3 px-4 py-5 sm:grid-cols-3 sm:px-6 lg:px-8">
+          {t.home.facts.map((f, i) => (
+            <div key={i} className="flex items-baseline gap-3 sm:block">
+              <dt className="text-xs text-accent-soft">{f.k}</dt>
+              <dd className="text-sm font-medium text-white sm:mt-0.5">{f.v}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
     </section>
   );
 }

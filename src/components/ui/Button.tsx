@@ -1,17 +1,16 @@
 import { SmartLink } from "@/components/ui/SmartLink";
 import clsx from "clsx";
 
-type Variant = "primary" | "gold" | "outline" | "outline-light" | "ghost-light";
+type Variant = "primary" | "accent" | "outline" | "outline-light";
 
 const base =
-  "inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold tracking-wide transition-[background-color,color,border-color,transform,box-shadow] duration-200 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50";
+  "inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-md px-5 py-3 text-sm font-semibold transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-forest text-white shadow-sm hover:bg-forest-deep hover:shadow-md",
-  gold: "bg-gold text-white shadow-sm hover:bg-coffee hover:shadow-md",
-  outline: "border border-forest/30 text-forest hover:border-forest hover:bg-forest hover:text-white",
-  "outline-light": "border border-white/50 text-white hover:border-white hover:bg-white hover:text-forest",
-  "ghost-light": "bg-white text-forest hover:bg-sand",
+  primary: "bg-ink text-white hover:bg-accent",
+  accent: "bg-accent text-white hover:bg-ink",
+  outline: "border border-ink/25 text-ink hover:border-ink hover:bg-ink hover:text-white",
+  "outline-light": "border border-white/50 text-white hover:border-white hover:bg-white hover:text-ink",
 };
 
 type CommonProps = { variant?: Variant; className?: string; children: React.ReactNode };

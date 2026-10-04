@@ -3,43 +3,36 @@
 import { ArrowDown } from "@phosphor-icons/react";
 import { JavaMap } from "./JavaMap";
 import { SmartLink } from "@/components/ui/SmartLink";
-import { Reveal, Stagger, StaggerItem } from "@/components/motion/Reveal";
 import { useLanguage } from "@/i18n/LanguageContext";
 
+/** Origin map on the left, company summary on the right (per the brief). */
 export function AtAGlance() {
   const { t } = useLanguage();
   return (
-    <section className="bg-cream py-24 sm:py-32">
-      <div className="mx-auto grid max-w-7xl items-start gap-14 px-4 sm:px-6 lg:grid-cols-2 lg:gap-20 lg:px-8">
-        <Reveal>
-          <JavaMap />
-        </Reveal>
+    <section className="bg-paper py-16 sm:py-24">
+      <div className="mx-auto grid max-w-7xl items-start gap-12 px-4 sm:px-6 lg:grid-cols-[7fr_5fr] lg:gap-16 lg:px-8">
+        <JavaMap />
 
-        <div className="lg:pt-6">
-          <Reveal>
-            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-gold">{t.about.glanceLabel}</p>
-            <h2 className="font-serif text-3xl leading-tight text-forest sm:text-4xl">{t.about.glanceTitle}</h2>
-            <p className="mt-6 text-lg text-muted">{t.about.glanceBody}</p>
-          </Reveal>
+        <div>
+          <h2 className="font-serif text-[1.75rem] leading-tight text-ink sm:text-[2.125rem]">{t.about.glanceTitle}</h2>
+          <p className="mt-5 text-base text-muted sm:text-lg">{t.about.glanceBody}</p>
 
-          <Stagger as="ul" className="mt-10 divide-y divide-line border-y border-line">
+          <dl className="mt-8 divide-y divide-line border-y border-ink/20">
             {t.about.facts.map((f, i) => (
-              <StaggerItem as="li" key={i} className="flex items-baseline justify-between gap-6 py-4">
-                <span className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">{f.k}</span>
-                <span className="text-right font-serif text-lg text-forest">{f.v}</span>
-              </StaggerItem>
+              <div key={i} className="flex items-baseline justify-between gap-6 py-3.5">
+                <dt className="text-sm text-muted">{f.k}</dt>
+                <dd className="text-right font-medium text-ink">{f.v}</dd>
+              </div>
             ))}
-          </Stagger>
+          </dl>
 
-          <Reveal className="mt-10">
-            <SmartLink
-              href="#product"
-              className="group inline-flex min-h-11 cursor-pointer items-center gap-2 font-semibold text-forest hover:text-gold"
-            >
-              {t.about.toProduct}
-              <ArrowDown size={18} weight="bold" className="transition-transform group-hover:translate-y-0.5" aria-hidden />
-            </SmartLink>
-          </Reveal>
+          <SmartLink
+            href="#product"
+            className="group mt-8 inline-flex min-h-11 cursor-pointer items-center gap-2 text-sm font-semibold text-accent hover:text-ink"
+          >
+            {t.about.toProduct}
+            <ArrowDown size={16} className="transition-transform group-hover:translate-y-0.5" aria-hidden />
+          </SmartLink>
         </div>
       </div>
     </section>
