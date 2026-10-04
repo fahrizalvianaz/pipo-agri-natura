@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { SmartLink } from "@/components/ui/SmartLink";
 import clsx from "clsx";
 
 type Variant = "primary" | "gold" | "outline" | "outline-light" | "ghost-light";
@@ -38,9 +38,9 @@ export function ButtonLink({
     );
   }
   return (
-    <Link href={href} className={cls} {...rest}>
+    <SmartLink href={href} className={cls} {...rest}>
       {children}
-    </Link>
+    </SmartLink>
   );
 }
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
@@ -11,6 +10,11 @@ import { useLanguage } from "@/i18n/LanguageContext";
 import type { Locale } from "@/i18n/dictionary";
 import { site } from "@/config/site";
 import { EASE_OUT } from "@/components/motion/Reveal";
+import { SmartLink } from "@/components/ui/SmartLink";
+
+// Product lives inside /about; it counts as "current" once its section reaches the navbar.
+const PRODUCT_HREF = "/about#product";
+const SPY_OFFSET = 140;
 
 function LanguageSwitch({ solid }: { solid: boolean }) {
   const { locale, setLocale, t } = useLanguage();
@@ -60,8 +64,13 @@ export function Navbar() {
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [inProduct, setInProduct] = useState(false);
 
-  useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > 40));
+  useMotionValueEvent(scrollY, "change", (y) => {
+    setScrolled(y > 40);
+    const product = document.getElementById("product");
+    setInProduct(!!product && product.getBoundingClientRect().top <= SPY_OFFSET);
+  });
 
   useEffect(() => {
     if (!open) return;
@@ -77,12 +86,15 @@ export function Navbar() {
   const links = [
     { href: "/", label: t.nav.home },
     { href: "/about", label: t.nav.about },
-    { href: "/about#product", label: t.nav.product },
+    { href: PRODUCT_HREF, label: t.nav.product },
     { href: "/sustainability", label: t.nav.sustainability },
     { href: "/contact", label: t.nav.contact },
   ];
 
   const solid = scrolled || open;
+  const activeHref = pathname === "/about" && inProduct ? PRODUCT_HREF : pathname;
+  const ariaCurrent = (href: string) =>
+    href === activeHref ? (href.includes("#") ? ("location" as const) : ("page" as const)) : undefined;
 
   return (
     <header
@@ -92,18 +104,18 @@ export function Navbar() {
       )}
     >
       <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8" aria-label="Main">
-        <Link href="/" className="cursor-pointer" aria-label={`${site.name} — ${t.nav.home}`} onClick={() => setOpen(false)}>
+        <SmartLink href="/" className="cursor-pointer" aria-label={`${site.name} — ${t.nav.home}`} onNavigate={() => setOpen(false)}>
           <Logo tone={solid ? "dark" : "light"} />
-        </Link>
+        </SmartLink>
 
         <ul className="hidden items-center gap-1 lg:flex">
           {links.map((l) => {
-            const active = l.href === pathname;
+            const active = l.href === activeHref;
             return (
               <li key={l.href}>
-                <Link
+                <SmartLink
                   href={l.href}
-                  aria-current={active ? "page" : undefined}
+                  aria-current={ariaCurrent(l.href)}
                   className={clsx(
                     "relative inline-flex min-h-11 cursor-pointer items-center px-3.5 text-sm font-medium transition-colors",
                     solid ? "text-ink hover:text-gold" : "text-white/90 hover:text-white",
@@ -116,7 +128,7 @@ export function Navbar() {
                       className={clsx("absolute inset-x-3.5 bottom-1.5 h-0.5 rounded-full", solid ? "bg-gold" : "bg-gold-soft")}
                     />
                   )}
-                </Link>
+                </SmartLink>
               </li>
             );
           })}
@@ -179,17 +191,17 @@ export function Navbar() {
                   initial={{ opacity: 0, x: -12 }}
                   animate={{ opacity: 1, x: 0, transition: { delay: 0.04 * i, duration: 0.3 } }}
                 >
-                  <Link
+                  <SmartLink
                     href={l.href}
-                    onClick={() => setOpen(false)}
-                    aria-current={l.href === pathname ? "page" : undefined}
+                    onNavigate={() => setOpen(false)}
+                    aria-current={ariaCurrent(l.href)}
                     className={clsx(
                       "flex min-h-14 cursor-pointer items-center border-b border-line font-serif text-2xl",
-                      l.href === pathname ? "text-gold" : "text-forest",
+                      l.href === activeHref ? "text-gold" : "text-forest",
                     )}
                   >
                     {l.label}
-                  </Link>
+                  </SmartLink>
                 </motion.li>
               ))}
               <li className="mt-6">

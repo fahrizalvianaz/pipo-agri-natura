@@ -17,7 +17,7 @@ export function SourcingSection() {
   ];
 
   return (
-    <section id="sourcing" className="scroll-mt-20 bg-sand/60 py-24 sm:py-32">
+    <section id="sourcing" className="bg-sand/60 py-24 sm:py-32">
       <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[1fr_1.25fr] lg:gap-16 lg:px-8">
         <Reveal>
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-gold">{f.label}</p>

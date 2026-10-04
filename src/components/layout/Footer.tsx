@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { SmartLink } from "@/components/ui/SmartLink";
 import { EnvelopeSimple, MapPin, WhatsappLogo } from "@phosphor-icons/react";
 import { Logo } from "./Logo";
 import { useLanguage } from "@/i18n/LanguageContext";
@@ -28,9 +28,9 @@ export function Footer() {
           <ul className="space-y-1">
             {links.map((l) => (
               <li key={l.href}>
-                <Link href={l.href} className="inline-flex min-h-9 cursor-pointer items-center text-sm hover:text-white">
+                <SmartLink href={l.href} className="inline-flex min-h-9 cursor-pointer items-center text-sm hover:text-white">
                   {l.label}
-                </Link>
+                </SmartLink>
               </li>
             ))}
           </ul>

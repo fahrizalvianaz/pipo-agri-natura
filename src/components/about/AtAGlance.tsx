@@ -2,6 +2,7 @@
 
 import { ArrowDown } from "@phosphor-icons/react";
 import { JavaMap } from "./JavaMap";
+import { SmartLink } from "@/components/ui/SmartLink";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/Reveal";
 import { useLanguage } from "@/i18n/LanguageContext";
 
@@ -31,13 +32,13 @@ export function AtAGlance() {
           </Stagger>
 
           <Reveal className="mt-10">
-            <a
+            <SmartLink
               href="#product"
               className="group inline-flex min-h-11 cursor-pointer items-center gap-2 font-semibold text-forest hover:text-gold"
             >
               {t.about.toProduct}
               <ArrowDown size={18} weight="bold" className="transition-transform group-hover:translate-y-0.5" aria-hidden />
-            </a>
+            </SmartLink>
           </Reveal>
         </div>
       </div>

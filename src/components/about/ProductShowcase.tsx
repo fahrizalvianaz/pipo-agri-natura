@@ -18,7 +18,7 @@ export function ProductShowcase() {
   const reduce = useReducedMotionSafe();
 
   return (
-    <section id="product" className="scroll-mt-20 bg-cream">
+    <section id="product" className="bg-cream">
       <div ref={ref} className="relative overflow-hidden">
         <div
           className="absolute inset-x-0 top-0 h-[78%] bg-forest-deep"
