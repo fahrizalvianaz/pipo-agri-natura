@@ -1,6 +1,7 @@
 /*
  * All site copy. Rule: only state what PIPO has confirmed (see the website brief).
- * Anything unconfirmed — specs, ports, certifications, programmes — is left out, not guessed.
+ * Anything unconfirmed — specs, ports, certifications — is left out, not guessed.
+ * Sustainability (ESG pillars, Code of Conduct) confirmed by PIPO.
  */
 const en = {
   nav: {
@@ -174,22 +175,44 @@ const en = {
   },
   sustain: {
     label: "Sustainability",
-    title: "Our approach to sustainability",
-    intro: "A short, factual statement of where PIPO Agri Natura stands today.",
-    statementTitle: "Where we stand",
-    statement: [
-      "PIPO Agri Natura was established in 2026 and sources from farmers and suppliers in Temanggung, Central Java.",
-      "We have not published a formal sustainability programme or certifications. Any programme, certification or measurable result will be listed here only once it can be verified.",
+    title: "Environmental, Social and Governance",
+    intro:
+      "We are a young company, and we want to grow the right way. These are the principles we commit to as we build our sourcing network in Temanggung.",
+    pillarsTitle: "Our ESG principles",
+    pillars: [
+      {
+        area: "Environmental",
+        title: "Building Nature Sustainability",
+        body: "We encourage responsible farming practices, careful use of land and water, and post-harvest handling that reduces waste — working with farmers and suppliers who share these values.",
+      },
+      {
+        area: "Social",
+        title: "Growing Human Quality",
+        body: "We value fair, long-term relationships with farmers and suppliers, safe working conditions, and sharing quality knowledge so that better coffee benefits the people who grow it.",
+      },
+      {
+        area: "Governance",
+        title: "Adopting Good Corporate Governance",
+        body: "We operate with transparency, accountability and compliance with applicable laws and export regulations, keeping our commitments clear and traceable.",
+      },
     ],
-    principlesTitle: "What we commit to now",
-    principlesIntro: "The principles that guide how we work with suppliers and buyers:",
-    principles: [
-      { title: "Transparency", body: "Making the details of our products visible, from the producers we work with to the buyers we serve." },
-      { title: "Quality", body: "Consistent standards and product quality, from one product to the next." },
-      { title: "Accountability", body: "Taking responsibility for the commitments we make and the products we deliver." },
+    codeLabel: "Code of Conduct",
+    codeTitle: "How we hold ourselves accountable",
+    codes: [
+      {
+        title: "Ethical Sourcing and Sustainability",
+        body: "We aim to source responsibly from farmers and suppliers who respect people and the environment.",
+      },
+      {
+        title: "Customer-Centric Excellence",
+        body: "We listen to buyer requirements, communicate clearly, and keep our promises on specification and timing.",
+      },
+      {
+        title: "Commitment to Integrity and Innovation",
+        body: "We act honestly in every transaction and keep improving how we source, select and deliver.",
+      },
     ],
-    visionTitle: "Our vision",
-    cta: "Ask us about sourcing in Temanggung",
+    cta: "Talk to us about responsible sourcing",
   },
   contact: {
     label: "Contact",
@@ -384,22 +407,44 @@ const id: Dictionary = {
   },
   sustain: {
     label: "Keberlanjutan",
-    title: "Pendekatan kami terhadap keberlanjutan",
-    intro: "Pernyataan singkat dan faktual tentang posisi PIPO Agri Natura saat ini.",
-    statementTitle: "Posisi kami",
-    statement: [
-      "PIPO Agri Natura didirikan pada 2026 dan mengambil produk dari petani dan pemasok di Temanggung, Jawa Tengah.",
-      "Kami belum menerbitkan program keberlanjutan formal maupun sertifikasi. Program, sertifikasi, atau hasil terukur apa pun hanya akan dicantumkan di sini setelah dapat diverifikasi.",
+    title: "Lingkungan, Sosial, dan Tata Kelola",
+    intro:
+      "Kami perusahaan yang masih muda, dan kami ingin tumbuh dengan cara yang benar. Inilah prinsip yang kami pegang saat membangun jaringan pengadaan di Temanggung.",
+    pillarsTitle: "Prinsip ESG kami",
+    pillars: [
+      {
+        area: "Lingkungan",
+        title: "Membangun Keberlanjutan Alam",
+        body: "Kami mendorong praktik budidaya yang bertanggung jawab, penggunaan lahan dan air yang bijak, serta penanganan pascapanen yang mengurangi limbah — bersama petani dan pemasok yang memiliki nilai yang sama.",
+      },
+      {
+        area: "Sosial",
+        title: "Menumbuhkan Kualitas Manusia",
+        body: "Kami menghargai hubungan jangka panjang yang adil dengan petani dan pemasok, kondisi kerja yang aman, serta berbagi pengetahuan mutu agar kopi yang lebih baik turut menyejahterakan penanamnya.",
+      },
+      {
+        area: "Tata Kelola",
+        title: "Menerapkan Tata Kelola Perusahaan yang Baik",
+        body: "Kami beroperasi dengan transparansi, akuntabilitas, dan kepatuhan terhadap hukum serta regulasi ekspor yang berlaku, menjaga komitmen kami tetap jelas dan dapat ditelusuri.",
+      },
     ],
-    principlesTitle: "Komitmen kami saat ini",
-    principlesIntro: "Prinsip yang memandu cara kami bekerja dengan pemasok dan pembeli:",
-    principles: [
-      { title: "Transparansi", body: "Membuat detail produk kami terlihat jelas, dari produsen yang bekerja sama dengan kami hingga pembeli yang kami layani." },
-      { title: "Kualitas", body: "Standar dan kualitas produk yang konsisten, dari satu produk ke produk berikutnya." },
-      { title: "Akuntabilitas", body: "Bertanggung jawab atas komitmen yang kami buat dan produk yang kami kirim." },
+    codeLabel: "Kode Etik",
+    codeTitle: "Cara kami menjaga tanggung jawab",
+    codes: [
+      {
+        title: "Pengadaan Etis dan Berkelanjutan",
+        body: "Kami berupaya mengambil produk secara bertanggung jawab dari petani dan pemasok yang menghormati manusia dan lingkungan.",
+      },
+      {
+        title: "Keunggulan Berorientasi Pelanggan",
+        body: "Kami mendengarkan kebutuhan pembeli, berkomunikasi dengan jelas, dan menepati janji soal spesifikasi dan waktu.",
+      },
+      {
+        title: "Komitmen pada Integritas dan Inovasi",
+        body: "Kami jujur dalam setiap transaksi dan terus memperbaiki cara kami mencari, memilih, dan mengirim.",
+      },
     ],
-    visionTitle: "Visi kami",
-    cta: "Tanyakan kepada kami tentang pengadaan di Temanggung",
+    cta: "Bicarakan pengadaan bertanggung jawab dengan kami",
   },
   contact: {
     label: "Kontak",

@@ -10,12 +10,12 @@ npm run build && npm run start
 ## Pages
 - `/` Home: hero with fact strip, vision, how we work, products, sample request
 - `/about` About + origin map (Indonesia → Java → Central Java → Temanggung), `#product` overview and FOB/CIF terms, `#request-sample` sourcing form
-- `/sustainability` Short, factual statement (no unverified programmes or certifications)
+- `/sustainability` ESG principles and Code of Conduct (confirmed by PIPO)
 - `/contact` Direct email / WhatsApp buttons + inquiry form
 
 ## Content rule
-Only publish what PIPO has confirmed. Product specs, export port, certifications and sustainability
-programmes are deliberately left out until confirmed. Add them in `src/i18n/dictionary.ts` (EN + ID).
+Only publish what PIPO has confirmed. Product specs, export port and certifications
+are deliberately left out until confirmed. Add them in `src/i18n/dictionary.ts` (EN + ID).
 
 ## Before going live, confirm or supply
 - `src/config/site.ts`: company email (placeholder), export port (omitted), approved logo (`src/components/layout/Logo.tsx` is a text placeholder)

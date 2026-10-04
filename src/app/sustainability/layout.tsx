@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Sustainability",
-  description: "A short, factual statement of PT Pipo Agri Natura's current approach to sustainability.",
+  description: "PT Pipo Agri Natura's environmental, social and governance principles and Code of Conduct.",
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

@@ -1,13 +1,11 @@
 "use client";
 
 import { PageHero } from "@/components/ui/PageHero";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 import { NextSectionCTA } from "@/components/ui/NextSectionCTA";
 import { useLanguage } from "@/i18n/LanguageContext";
 
-/*
- * Intentionally short: only what PIPO can stand behind today.
- * Add programmes, certifications or results here once they exist and can be verified.
- */
+/** Confirmed ESG principles and Code of Conduct, presented as editorial text — no cards or stock imagery. */
 export default function SustainabilityPage() {
   const { t } = useLanguage();
   const s = t.sustain;
@@ -15,40 +13,37 @@ export default function SustainabilityPage() {
     <>
       <PageHero label={s.label} title={s.title} intro={s.intro} />
 
-      <section className="bg-paper py-16 sm:py-20">
-        <div className="mx-auto grid max-w-7xl gap-6 px-4 sm:px-6 md:grid-cols-[12rem_1fr] md:gap-12 lg:px-8">
-          <h2 className="text-sm font-medium text-accent md:pt-1">{s.statementTitle}</h2>
-          <div className="max-w-2xl space-y-4 text-lg text-ink">
-            {s.statement.map((para, i) => (
-              <p key={i}>{para}</p>
+      <section className="bg-paper py-16 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <SectionHeading title={s.pillarsTitle} />
+          <div className="mt-10 border-b border-line">
+            {s.pillars.map((p, i) => (
+              <article key={i} className="grid gap-3 border-t border-ink/20 py-8 md:grid-cols-[14rem_1fr] md:gap-12">
+                <p className="flex items-baseline gap-3 text-sm text-accent">
+                  <span className="tabular-nums">0{i + 1}</span>
+                  <span className="font-medium">{p.area}</span>
+                </p>
+                <div className="max-w-2xl">
+                  <h3 className="font-serif text-2xl text-ink">{p.title}</h3>
+                  <p className="mt-3 text-muted sm:text-lg">{p.body}</p>
+                </div>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="border-y border-line bg-stone py-16 sm:py-20">
-        <div className="mx-auto grid max-w-7xl gap-6 px-4 sm:px-6 md:grid-cols-[12rem_1fr] md:gap-12 lg:px-8">
-          <h2 className="text-sm font-medium text-accent md:pt-1">{s.principlesTitle}</h2>
-          <div>
-            <p className="text-muted">{s.principlesIntro}</p>
-            <dl className="mt-6 max-w-3xl divide-y divide-line border-y border-ink/20">
-              {s.principles.map((p, i) => (
-                <div key={i} className="grid gap-1 py-4 sm:grid-cols-[10rem_1fr] sm:gap-6">
-                  <dt className="font-serif text-lg text-ink">{p.title}</dt>
-                  <dd className="text-muted">{p.body}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-paper py-16 sm:py-20">
-        <div className="mx-auto grid max-w-7xl gap-6 px-4 sm:px-6 md:grid-cols-[12rem_1fr] md:gap-12 lg:px-8">
-          <h2 className="text-sm font-medium text-accent md:pt-1">{s.visionTitle}</h2>
-          <blockquote className="max-w-3xl border-l-2 border-sage pl-5 font-serif text-xl leading-relaxed text-ink sm:text-2xl">
-            {t.home.vision}
-          </blockquote>
+      <section className="border-y border-line bg-stone py-16 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <SectionHeading label={s.codeLabel} title={s.codeTitle} />
+          <dl className="mt-10 max-w-4xl divide-y divide-line border-y border-ink/20">
+            {s.codes.map((c, i) => (
+              <div key={i} className="grid gap-1 py-5 sm:grid-cols-[18rem_1fr] sm:gap-8">
+                <dt className="font-serif text-lg text-ink">{c.title}</dt>
+                <dd className="text-muted">{c.body}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </section>
 
