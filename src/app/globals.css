@@ -14,9 +14,11 @@
   --line: #dcdad3; /* hairlines */
   --sage: #6b7a5a; /* green-bean accent — fills, large text */
   --accent: #4f5c40; /* accent for small text & links — 6.7:1 on paper */
+  --accent-strong: #3a4530; /* map: Temanggung while lifted */
   --accent-soft: #c3ccb2; /* accent on dark backgrounds */
   --night: #1c1e1a; /* dark surfaces: footer, image overlays */
   --sea: #e8ebe4; /* map water */
+  --sage-tint: #d2d7ca; /* map: Central Java fill (sage at ~30% on paper) */
   --danger: #b42318;
 }
 
@@ -29,9 +31,11 @@
   --color-line: var(--line);
   --color-sage: var(--sage);
   --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
   --color-accent-soft: var(--accent-soft);
   --color-night: var(--night);
   --color-sea: var(--sea);
+  --color-sage-tint: var(--sage-tint);
   --color-danger: var(--danger);
   --font-sans: var(--font-inter);
   --font-serif: var(--font-playfair);

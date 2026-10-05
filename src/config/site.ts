@@ -18,6 +18,6 @@ const u = (id: string) => `https://images.unsplash.com/photo-${id}`;
 export const images = {
   greenBeansPile: u("1703646619157-eb553d16d402"), // raw green coffee beans
   greenBeansBasket: u("1789419773211-075a4c400b4b"), // raw green coffee beans in a woven basket
-  cherries: u("1750967613671-297f1b63038d"), // ripe coffee cherries on the branch
   tobacco: u("1758414083946-df1b3b44ce84"), // tobacco plants in a field
+  cherriesBranch: u("1515694590185-73647ba02c10"), // green and ripe coffee cherries on the branch
 } as const;

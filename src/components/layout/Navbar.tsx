@@ -4,7 +4,7 @@ import { useEffect, useId, useState } from "react";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { List, WhatsappLogo, X } from "@phosphor-icons/react";
+import { List, X } from "@phosphor-icons/react";
 import { Logo } from "./Logo";
 import { useLanguage } from "@/i18n/LanguageContext";
 import type { Locale } from "@/i18n/dictionary";
@@ -12,11 +12,9 @@ import { site } from "@/config/site";
 import { EASE_OUT } from "@/components/motion/tokens";
 import { SmartLink } from "@/components/ui/SmartLink";
 
-// Product lives inside /about; it counts as "current" once its section reaches the navbar.
-const PRODUCT_HREF = "/about#product";
+// Section ids on the landing page, in page order. A section is "current" once its top reaches the navbar.
+const SECTIONS = ["about", "origin", "product", "sustainability"] as const;
 const SPY_OFFSET = 140;
-// Pages whose header is a dark photo: the navbar starts transparent there, solid elsewhere.
-const PHOTO_HEADER_PATHS = ["/", "/about"];
 
 function LanguageSwitch({ solid }: { solid: boolean }) {
   const { locale, setLocale, t } = useLanguage();
@@ -27,10 +25,7 @@ function LanguageSwitch({ solid }: { solid: boolean }) {
     <div
       role="group"
       aria-label={t.nav.language}
-      className={clsx(
-        "flex rounded-md border p-0.5 text-xs font-semibold",
-        solid ? "border-line" : "border-white/40",
-      )}
+      className={clsx("flex rounded-md border p-0.5 text-xs font-semibold", solid ? "border-line" : "border-white/40")}
     >
       {options.map((opt) => {
         const active = locale === opt;
@@ -66,12 +61,19 @@ export function Navbar() {
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [inProduct, setInProduct] = useState(false);
+  const [current, setCurrent] = useState<string | null>(null);
 
   useMotionValueEvent(scrollY, "change", (y) => {
     setScrolled(y > 40);
-    const product = document.getElementById("product");
-    setInProduct(!!product && product.getBoundingClientRect().top <= SPY_OFFSET);
+    let active: string | null = null;
+    for (const id of SECTIONS) {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top <= SPY_OFFSET) active = id;
+    }
+    // past the end of Sustainability (sample band / contact): nothing in the menu is current
+    const contact = document.getElementById("contact");
+    if (contact && contact.getBoundingClientRect().top <= SPY_OFFSET + 200) active = null;
+    setCurrent(active);
   });
 
   useEffect(() => {
@@ -85,18 +87,11 @@ export function Navbar() {
     };
   }, [open]);
 
-  const links = [
-    { href: "/", label: t.nav.home },
-    { href: "/about", label: t.nav.about },
-    { href: PRODUCT_HREF, label: t.nav.product },
-    { href: "/sustainability", label: t.nav.sustainability },
-    { href: "/contact", label: t.nav.contact },
-  ];
-
-  const solid = scrolled || open || !PHOTO_HEADER_PATHS.includes(pathname);
-  const activeHref = pathname === "/about" && inProduct ? PRODUCT_HREF : pathname;
-  const ariaCurrent = (href: string) =>
-    href === activeHref ? (href.includes("#") ? ("location" as const) : ("page" as const)) : undefined;
+  const links = SECTIONS.map((id) => ({ id, href: `/#${id}`, label: t.nav[id] }));
+  const onLanding = pathname === "/";
+  // transparent over the hero photo; solid once scrolled, with the menu open, or off the landing page
+  const solid = scrolled || open || !onLanding;
+  const isCurrent = (id: string) => onLanding && current === id;
 
   return (
     <header
@@ -106,25 +101,24 @@ export function Navbar() {
       )}
     >
       <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8" aria-label="Main">
-        <SmartLink href="/" className="cursor-pointer" aria-label={`${site.name} — ${t.nav.home}`} onNavigate={() => setOpen(false)}>
+        <SmartLink href="/" className="cursor-pointer" aria-label={`${site.name} — ${t.nav.backToTop}`} onNavigate={() => setOpen(false)}>
           <Logo tone={solid ? "dark" : "light"} />
         </SmartLink>
 
-        <ul className="hidden items-center gap-1 lg:flex">
-          {links.map((l) => {
-            const active = l.href === activeHref;
-            return (
-              <li key={l.href}>
+        <div className="hidden items-center gap-8 lg:flex">
+          <ul className="flex items-center gap-1">
+            {links.map((l) => (
+              <li key={l.id}>
                 <SmartLink
                   href={l.href}
-                  aria-current={ariaCurrent(l.href)}
+                  aria-current={isCurrent(l.id) ? "location" : undefined}
                   className={clsx(
                     "relative inline-flex min-h-11 cursor-pointer items-center px-3.5 text-sm font-medium transition-colors",
                     solid ? "text-ink hover:text-accent" : "text-white/90 hover:text-white",
                   )}
                 >
                   {l.label}
-                  {active && (
+                  {isCurrent(l.id) && (
                     <motion.span
                       layoutId="nav-underline"
                       className={clsx("absolute inset-x-3.5 bottom-1.5 h-0.5", solid ? "bg-accent" : "bg-accent-soft")}
@@ -132,31 +126,20 @@ export function Navbar() {
                   )}
                 </SmartLink>
               </li>
-            );
-          })}
-        </ul>
-
-        <div className="hidden items-center gap-4 lg:flex">
-          <LanguageSwitch solid={solid} />
-          <a
-            href={`https://wa.me/${site.whatsapp}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={clsx("flex cursor-pointer items-center gap-2.5 text-left", solid ? "text-ink" : "text-white")}
-          >
-            <span
+            ))}
+          </ul>
+          <div className="flex items-center gap-3">
+            <LanguageSwitch solid={solid} />
+            <SmartLink
+              href="/#request-sample"
               className={clsx(
-                "flex size-10 items-center justify-center rounded-md border",
-                solid ? "border-line text-accent" : "border-white/40",
+                "inline-flex min-h-10 cursor-pointer items-center rounded-md px-4 text-sm font-semibold transition-colors",
+                solid ? "bg-accent text-white hover:bg-ink" : "bg-white text-ink hover:bg-accent-soft",
               )}
             >
-              <WhatsappLogo size={20} aria-hidden />
-            </span>
-            <span className="leading-tight">
-              <span className={clsx("block text-[0.7rem]", solid ? "text-muted" : "text-white/70")}>{t.nav.questions}</span>
-              <span className="block text-sm font-semibold tabular-nums">{site.whatsappDisplay}</span>
-            </span>
-          </a>
+              {t.nav.cta}
+            </SmartLink>
+          </div>
         </div>
 
         <div className="flex items-center gap-3 lg:hidden">
@@ -167,10 +150,7 @@ export function Navbar() {
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? t.nav.close : t.nav.menu}
-            className={clsx(
-              "flex size-11 cursor-pointer items-center justify-center rounded-md",
-              solid ? "text-ink" : "text-white",
-            )}
+            className={clsx("flex size-11 cursor-pointer items-center justify-center rounded-md", solid ? "text-ink" : "text-white")}
           >
             {open ? <X size={26} aria-hidden /> : <List size={26} aria-hidden />}
           </button>
@@ -186,34 +166,32 @@ export function Navbar() {
             animate={{ opacity: 1, transition: { duration: 0.2, ease: EASE_OUT } }}
             exit={{ opacity: 0, transition: { duration: 0.12 } }}
           >
-            <ul className="mx-auto flex h-[calc(100dvh-5rem)] max-w-7xl flex-col gap-1 overflow-y-auto px-4 py-6 sm:px-6">
-              {links.map((l) => (
-                <li key={l.href}>
-                  <SmartLink
-                    href={l.href}
-                    onNavigate={() => setOpen(false)}
-                    aria-current={ariaCurrent(l.href)}
-                    className={clsx(
-                      "flex min-h-14 cursor-pointer items-center border-b border-line font-serif text-2xl",
-                      l.href === activeHref ? "text-accent" : "text-ink",
-                    )}
-                  >
-                    {l.label}
-                  </SmartLink>
-                </li>
-              ))}
-              <li className="mt-6">
-                <a
-                  href={`https://wa.me/${site.whatsapp}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex min-h-12 cursor-pointer items-center gap-3 text-ink"
-                >
-                  <WhatsappLogo size={24} className="text-accent" aria-hidden />
-                  <span className="font-semibold tabular-nums">{site.whatsappDisplay}</span>
-                </a>
-              </li>
-            </ul>
+            <div className="mx-auto flex h-[calc(100dvh-5rem)] max-w-7xl flex-col overflow-y-auto px-4 py-6 sm:px-6">
+              <ul className="flex flex-col">
+                {links.map((l) => (
+                  <li key={l.id}>
+                    <SmartLink
+                      href={l.href}
+                      onNavigate={() => setOpen(false)}
+                      aria-current={isCurrent(l.id) ? "location" : undefined}
+                      className={clsx(
+                        "flex min-h-14 cursor-pointer items-center border-b border-line font-serif text-2xl",
+                        isCurrent(l.id) ? "text-accent" : "text-ink",
+                      )}
+                    >
+                      {l.label}
+                    </SmartLink>
+                  </li>
+                ))}
+              </ul>
+              <SmartLink
+                href="/#request-sample"
+                onNavigate={() => setOpen(false)}
+                className="mt-8 inline-flex min-h-12 cursor-pointer items-center justify-center rounded-md bg-accent px-5 text-sm font-semibold text-white"
+              >
+                {t.nav.cta}
+              </SmartLink>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

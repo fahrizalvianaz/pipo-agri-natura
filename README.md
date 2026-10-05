@@ -7,11 +7,15 @@ npm run dev     # http://localhost:3000
 npm run build && npm run start
 ```
 
-## Pages
-- `/` Home: hero with fact strip, vision, how we work, products, sample request
-- `/about` About + origin map (Indonesia → Java → Central Java → Temanggung), `#product` overview and FOB/CIF terms, `#request-sample` sourcing form
-- `/sustainability` ESG principles and Code of Conduct (confirmed by PIPO)
-- `/contact` Direct email / WhatsApp buttons + inquiry form
+## Structure
+Single landing page (`/`), sections in order:
+`#top` hero (parallax) · `#about` company, vision, how we work · `#origin` Temanggung map ·
+`#product` our products (Green Coffee, Leaf) + FOB/CIF terms · `#sustainability` ESG + Code of Conduct · sample band (parallax) ·
+`#contact` email / WhatsApp + sourcing form (`#request-sample`).
+Old URLs `/about`, `/product`, `/sustainability`, `/contact` redirect to their section (see `next.config.ts`).
+Parallax: `src/components/motion/ParallaxImage.tsx` (disabled when the visitor prefers reduced motion).
+Origin map: real regency boundaries (geoBoundaries IDN ADM2 — BPS / WFP / OCHA, CC BY 3.0 IGO, credited under the map),
+pre-projected into `src/components/landing/originMapData.ts` by `scripts/build-origin-map.py`.
 
 ## Content rule
 Only publish what PIPO has confirmed. Product specs, export port and certifications

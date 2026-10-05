@@ -1,63 +1,54 @@
 "use client";
 
-import { SmartLink } from "@/components/ui/SmartLink";
 import { EnvelopeSimple, MapPin, WhatsappLogo } from "@phosphor-icons/react";
+import { SmartLink } from "@/components/ui/SmartLink";
 import { Logo } from "./Logo";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { site } from "@/config/site";
 
 export function Footer() {
   const { t } = useLanguage();
-  const links = [
-    { href: "/", label: t.nav.home },
-    { href: "/about", label: t.nav.about },
-    { href: "/about#product", label: t.nav.product },
-    { href: "/sustainability", label: t.nav.sustainability },
-    { href: "/contact", label: t.nav.contact },
-  ];
+  const links = (["about", "origin", "product", "sustainability", "contact"] as const).map((id) => ({
+    href: `/#${id}`,
+    label: t.nav[id],
+  }));
 
   return (
     <footer className="bg-night text-white/80">
-      <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-[1.4fr_1fr_1.2fr] lg:px-8">
         <div className="max-w-sm">
           <Logo tone="light" />
           <p className="mt-5 text-sm leading-relaxed">{t.footer.tagline}</p>
         </div>
-        <div>
-          <h2 className="mb-3 text-sm font-medium text-accent-soft">{t.footer.explore}</h2>
-          <ul className="space-y-1">
-            {links.map((l) => (
-              <li key={l.href}>
-                <SmartLink href={l.href} className="inline-flex min-h-9 cursor-pointer items-center text-sm hover:text-white">
-                  {l.label}
-                </SmartLink>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h2 className="mb-3 text-sm font-medium text-accent-soft">{t.footer.reach}</h2>
-          <ul className="space-y-3 text-sm">
-            <li>
-              <a href={`mailto:${site.email}`} className="flex cursor-pointer items-center gap-3 hover:text-white">
-                <EnvelopeSimple size={18} aria-hidden /> {site.email}
-              </a>
+        <ul className="grid grid-cols-2 gap-x-6 gap-y-1 self-start text-sm md:grid-cols-1">
+          {links.map((l) => (
+            <li key={l.href}>
+              <SmartLink href={l.href} className="inline-flex min-h-9 cursor-pointer items-center hover:text-white">
+                {l.label}
+              </SmartLink>
             </li>
-            <li>
-              <a
-                href={`https://wa.me/${site.whatsapp}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex cursor-pointer items-center gap-3 tabular-nums hover:text-white"
-              >
-                <WhatsappLogo size={18} aria-hidden /> {site.whatsappDisplay}
-              </a>
-            </li>
-            <li className="flex items-center gap-3">
-              <MapPin size={18} aria-hidden /> {site.origin}
-            </li>
-          </ul>
-        </div>
+          ))}
+        </ul>
+        <ul className="space-y-3 self-start text-sm">
+          <li>
+            <a href={`mailto:${site.email}`} className="flex cursor-pointer items-center gap-3 hover:text-white">
+              <EnvelopeSimple size={18} aria-hidden /> {site.email}
+            </a>
+          </li>
+          <li>
+            <a
+              href={`https://wa.me/${site.whatsapp}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex cursor-pointer items-center gap-3 tabular-nums hover:text-white"
+            >
+              <WhatsappLogo size={18} aria-hidden /> {site.whatsappDisplay}
+            </a>
+          </li>
+          <li className="flex items-center gap-3">
+            <MapPin size={18} aria-hidden /> {site.origin}
+          </li>
+        </ul>
       </div>
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-6 text-xs text-white/60 sm:flex-row sm:justify-between sm:px-6 lg:px-8">

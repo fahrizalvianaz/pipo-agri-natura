@@ -2,60 +2,51 @@
 
 import Image from "next/image";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { ArrowRight } from "@phosphor-icons/react";
 import { ButtonLink } from "@/components/ui/Button";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { images } from "@/config/site";
 
-/** Product, confirmed specification and commercial terms — information first, no decoration. */
+const productImages = [images.greenBeansBasket, images.tobacco];
+
+/** Our products (per the brief), followed by the commercial shipping terms. */
 export function ProductSection() {
   const { t } = useLanguage();
   const p = t.product;
 
   return (
-    <section id="product" className="border-t border-line bg-paper py-16 sm:py-24">
+    <section id="product" className="border-t border-line bg-paper py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeading label={p.label} title={p.title} intro={p.intro} />
+        <SectionHeading label={p.label} title={p.title} />
 
-        <div className="mt-12 grid items-start gap-10 lg:grid-cols-[5fr_7fr] lg:gap-14">
-          <figure>
-            <div className="relative aspect-[4/3] overflow-hidden rounded-md bg-stone">
-              <Image
-                src={`${images.greenBeansPile}?auto=format&fit=crop&w=1200&q=75`}
-                alt={p.imageAlt}
-                fill
-                sizes="(min-width: 1280px) 500px, (min-width: 1024px) 40vw, 100vw"
-                className="object-cover"
-              />
-            </div>
-            <figcaption className="mt-2 text-xs text-muted">{p.imageCaption}</figcaption>
-          </figure>
+        <div className="mt-12 grid gap-12 md:grid-cols-2 md:gap-10">
+          {p.items.map((item, i) => (
+            <article key={i}>
+              <figure>
+                <div className="relative aspect-[3/2] overflow-hidden rounded-md bg-stone">
+                  <Image
+                    src={`${productImages[i]}?auto=format&fit=crop&w=1200&q=75`}
+                    alt={item.alt}
+                    fill
+                    sizes="(min-width: 1280px) 592px, (min-width: 768px) 50vw, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+                <figcaption className="mt-2 text-xs text-muted">{item.caption}</figcaption>
+              </figure>
+              <p className="mt-6 text-sm font-medium text-accent">{item.brand}</p>
+              <h3 className="mt-1 font-serif text-2xl text-ink">{item.name}</h3>
+              <p className="mt-3 max-w-xl text-muted">{item.body}</p>
+            </article>
+          ))}
+        </div>
 
-          <div className="min-w-0">
-            <h3 className="font-serif text-xl text-ink">{p.specTitle}</h3>
-            <table className="mt-4 w-full border-y border-ink/20 text-left text-sm">
-              <thead>
-                <tr className="border-b border-line">
-                  {p.specCols.map((c, i) => (
-                    <th key={i} scope="col" className="py-3 pr-4 font-semibold text-ink last:pr-0">
-                      {c || <span className="sr-only">{p.specTitle}</span>}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-line">
-                {p.specRows.map((r, i) => (
-                  <tr key={i} className="align-top">
-                    <th scope="row" className="w-28 py-3 pr-4 font-normal text-muted">
-                      {r.k}
-                    </th>
-                    <td className="py-3 pr-4 text-ink">{r.a}</td>
-                    <td className="py-3 text-ink">{r.r}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <p className="mt-4 max-w-2xl text-sm text-muted">{p.specNote}</p>
-          </div>
+        {/* one enquiry action for both products — the form lists coffee and Java Leaf as options */}
+        <div className="mt-10">
+          <ButtonLink href="/#contact" variant="accent">
+            {p.enquireCta}
+            <ArrowRight size={16} aria-hidden />
+          </ButtonLink>
         </div>
 
         <div className="mt-16 border-t border-line pt-10">
@@ -111,12 +102,6 @@ export function ProductSection() {
           <p className="mt-4 text-sm text-muted">{p.shippingNote}</p>
         </div>
 
-        <div className="mt-12 flex flex-col items-start gap-4 rounded-md bg-stone px-6 py-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-serif text-xl text-ink">{p.sampleLine}</p>
-          <ButtonLink href="#request-sample" variant="accent">
-            {p.sampleCta}
-          </ButtonLink>
-        </div>
       </div>
     </section>
   );

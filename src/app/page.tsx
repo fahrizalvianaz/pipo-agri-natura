@@ -1,26 +1,22 @@
-"use client";
+import { Hero } from "@/components/landing/Hero";
+import { AboutSection } from "@/components/landing/AboutSection";
+import { OriginSection } from "@/components/landing/OriginSection";
+import { ProductSection } from "@/components/landing/ProductSection";
+import { SustainabilitySection } from "@/components/landing/SustainabilitySection";
+import { SampleBand } from "@/components/landing/SampleBand";
+import { ContactSection } from "@/components/landing/ContactSection";
 
-import { Hero } from "@/components/home/Hero";
-import { VisionTeaser } from "@/components/home/VisionTeaser";
-import { HowWeWork } from "@/components/home/HowWeWork";
-import { ProductsPreview } from "@/components/home/ProductsPreview";
-import { CtaBand } from "@/components/ui/CtaBand";
-import { useLanguage } from "@/i18n/LanguageContext";
-
+/** Single-page landing: who → origin → product & terms → principles → request → contact. */
 export default function HomePage() {
-  const { t } = useLanguage();
   return (
     <>
       <Hero />
-      <VisionTeaser />
-      <HowWeWork />
-      <ProductsPreview />
-      <CtaBand
-        title={t.home.sampleTitle}
-        body={t.home.sampleBody}
-        cta={t.home.sampleCta}
-        href="/about#request-sample"
-      />
+      <AboutSection />
+      <OriginSection />
+      <ProductSection />
+      <SustainabilitySection />
+      <SampleBand />
+      <ContactSection />
     </>
   );
 }
