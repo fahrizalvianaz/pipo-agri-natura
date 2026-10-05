@@ -111,7 +111,7 @@ const en = {
         buyer: "Unloading, import duties and import clearance",
       },
     ],
-    shippingNote: "Port of loading, freight and insurance details are confirmed per inquiry.",
+    shippingNote: "",
   },
   sustain: {
     label: "Sustainability",
@@ -122,7 +122,7 @@ const en = {
       {
         area: "Environmental",
         title: "Building Nature Sustainability",
-        body: "We encourage responsible farming practices, careful use of land and water, and post-harvest handling that reduces waste — working with farmers and suppliers who share these values.",
+        body: "We encourage responsible farming practices, careful use of land and water, and post-harvest handling that reduces waste.",
       },
       {
         area: "Social",
